@@ -1,0 +1,107 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    static int[] unique(int a[])
+    {
+        List<Integer> remDup=new ArrayList<Integer>();
+        int l=a.length;
+        for(int i=0;i<l-1;i++)
+        {
+            if(a[i]!=a[i+1])
+            remDup.add(a[i]);
+        }
+        remDup.add(a[l-1]);
+        int len=remDup.size();
+        int arr[]=new int[len];
+        for(int i=0;i<len;i++)
+        arr[i]=remDup.get(i);
+        return arr;
+
+    }
+    static int lowerBound(int arr[],int ele)
+    {
+        int l=0,h=arr.length-1,mid=(l+h)/2;
+        while(l<h)
+        {
+            if(arr[mid]==ele)
+            {
+                break;
+            }
+            else if(arr[mid]>ele)
+            l=mid+1;
+            else
+            h=mid-1;
+            mid=(l+h)/2;
+        }
+        return (mid);
+    }
+    // Complete the climbingLeaderboard function below.
+    static int[] climbingLeaderboard(int[] scores, int[] alice) 
+    {
+        int alc=alice.length,rank[]=new int[alc],s[]=unique(scores);
+        for(int i=0;i<alc;i++)
+        {
+            int rnk=lowerBound(s,alice[i]);
+            if(s[rnk]>alice[i])
+            rank[i]=rnk+2;
+            else
+            rank[i]=rnk+1;
+        }
+        return rank;
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int scoresCount = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        int[] scores = new int[scoresCount];
+
+        String[] scoresItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < scoresCount; i++) {
+            int scoresItem = Integer.parseInt(scoresItems[i]);
+            scores[i] = scoresItem;
+        }
+
+        int aliceCount = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        int[] alice = new int[aliceCount];
+
+        String[] aliceItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < aliceCount; i++) {
+            int aliceItem = Integer.parseInt(aliceItems[i]);
+            alice[i] = aliceItem;
+        }
+
+        int[] result = climbingLeaderboard(scores, alice);
+
+        for (int i = 0; i < result.length; i++) {
+            bufferedWriter.write(String.valueOf(result[i]));
+
+            if (i != result.length - 1) {
+                bufferedWriter.write("\n");
+            }
+        }
+
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+
+        scanner.close();
+    }
+}
